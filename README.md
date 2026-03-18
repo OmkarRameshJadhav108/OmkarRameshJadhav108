@@ -1,18 +1,10 @@
-# wrappy
-
-Callback wrapping utility
-
-## USAGE
-
-```javascript
 var wrappy = require("wrappy")
+var assert = require("assert")
 
-// var wrapper = wrappy(wrapperFunction)
-
-// make sure a cb is called only once
-// See also: http://npm.im/once for this specific use case
+// Create a wrapper that ensures a function is called only once
 var once = wrappy(function (cb) {
   var called = false
+
   return function () {
     if (called) return
     called = true
@@ -20,17 +12,20 @@ var once = wrappy(function (cb) {
   }
 })
 
+// Function to test
 function printBoo () {
-  console.log('boo')
+  console.log("boo")
 }
-// has some rando property
+
+// Add custom property
 printBoo.iAmBooPrinter = true
 
+// Wrap the function
 var onlyPrintOnce = once(printBoo)
 
-onlyPrintOnce() // prints 'boo'
+// Call multiple times
+onlyPrintOnce() // prints "boo"
 onlyPrintOnce() // does nothing
 
-// random property is retained!
+// Check property is preserved
 assert.equal(onlyPrintOnce.iAmBooPrinter, true)
-```
